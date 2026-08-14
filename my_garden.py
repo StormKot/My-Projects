@@ -112,7 +112,7 @@ def plant_seed():
             print("У вас нет семян!")
             return
         
-        # Проверяем, есть ли свободные грядки
+        
         free_beds = [bed_id for bed_id, bed in player_data["Огород"].items() if bed is None]
         if not free_beds:
             print("Нет свободных грядок!")
@@ -130,7 +130,6 @@ def plant_seed():
                 seed = seeds[choice-1]
                 plant_name = seed["name"]
                 
-                # Сажаем на первую свободную грядку
                 for bed_id, bed in player_data["Огород"].items():
                     if bed is None:
                         player_data["Огород"][bed_id] = {
