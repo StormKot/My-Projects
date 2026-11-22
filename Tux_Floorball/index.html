@@ -147,7 +147,7 @@ document.getElementById('go').onclick=async()=>{
   myTeam=+document.getElementById('tmSel').value;myCap=document.getElementById('isCap').checked?1:0;
   botMult=+document.getElementById('diff').value;chaosOn=document.getElementById('chaosCb').checked?1:0;
   myNum=Math.max(1,Math.min(99,+document.getElementById('pNum').value||10));
-  document.getElementById('menu').style.display='none';sP=sB=0;evName='';evT=0;evCd=12;tLeft=+document.getElementById('dur').value;
+  document.getElementById('menu').style.display='none';sP=sB=shotsP=shotsB=possP=possB=soMode=0;evName='';evT=0;evCd=12;tLeft=+document.getElementById('dur').value;
   document.getElementById('sp').textContent=0;document.getElementById('sb').textContent=0;over=0;rst();sfx(440,.1);
   try{await document.documentElement.requestFullscreen();await screen.orientation.lock('landscape');}catch(e){}
 };
@@ -172,7 +172,7 @@ function mode(st){
 }
 function askPass(){askT=1.3;sfx(780,.07);const p=myP();if(own&&own!==p&&own.t===myTeam&&own.ai){const a=Math.atan2(p.y-own.y,p.x-own.x);b.vx=Math.cos(a)*540;b.vy=Math.sin(a)*540;own=null;cd=.2;}}
 function mDown(){const p=myP();if(own===p){isC=1;chg=.01;}else{pkT=.22;dT=.15;sfx(260,.08,'triangle',.08);if(!isHost)netAct={tp:'poke',a:p.a};if(!p.gk){const t=tip(p,p.a);if(Math.hypot(b.x-t.x,b.y-t.y)<36){own=p;cd=.18;sfx(520,.06);}}}}
-function mUp(){if(!isC)return;const p=myP();if(own===p){const isP=!p.gk&&chg<.24,a=p.a,pw=p.gk?500+Math.min(1,chg)*300:(isP?530:440+Math.min(1,chg)*560),sp=p.gk||isP?0:(joy.y||0)*2.2,pwr=!p.gk&&!isP&&chg>=.88?1:0;if(!isHost)netAct={tp:'shot',a,pw,sp,pwr};b.vx=Math.cos(a)*pw;b.vy=Math.sin(a)*pw;b.sp=sp;b.pwr=pwr;b.x+=Math.cos(a)*15;b.y+=Math.sin(a)*15;own=null;cd=.22;sfx(pwr?120:(isP?420:190),pwr?.24:(isP?.08:.16),'triangle',.18);if(isP&&canSwitch())doSwitch();}isC=chg=0;}
+function mUp(){if(!isC)return;const p=myP();if(own===p){const isP=!p.gk&&chg<.24,a=p.a,pw=p.gk?500+Math.min(1,chg)*300:(isP?530:440+Math.min(1,chg)*560),sp=p.gk||isP?0:(joy.y||0)*2.2,pwr=!p.gk&&!isP&&chg>=.88?1:0;if(!isHost)netAct={tp:'shot',a,pw,sp,pwr};b.vx=Math.cos(a)*pw;b.vy=Math.sin(a)*pw;b.sp=sp;b.pwr=pwr;if(p.t===0)shotsP++;else shotsB++;b.x+=Math.cos(a)*15;b.y+=Math.sin(a)*15;own=null;cd=.22;sfx(pwr?120:(isP?420:190),pwr?.24:(isP?.08:.16),'triangle',.18);if(isP&&canSwitch())doSwitch();}isC=chg=0;}
 function doSwitch(){if(!canSwitch())return;const ros=teamRoster(myTeam),old=myP();old.ai=1;old.uid=null;for(let s=1;s<=ros.length;s++){const nxt=(actIdx+s)%ros.length;if(ros.at(nxt).ai&&!ros.at(nxt).uid){actIdx=nxt;break;}}const np=myP();np.ai=0;np.uid=myId;np.s=np.gk?195:265;isC=chg=0;sfx(560,.06);}
 function s1Act(){const p=myP();if(!p.gk&&own===p){if(isC)isC=chg=0;p.a+=2.3*(joy.y<0?-1:1);b.sp=3.8;dT=.12;sfx(620,.09,'sine',.1);}else{doSwitch();}}
 const dash=()=>{if(stm>=.32&&dT<=0){dT=.22;stm-=.32;sfx(300,.1,'sawtooth',.06);}};
@@ -206,7 +206,21 @@ function loop(now){
   else{ref.arm=0;const rtx=Math.max(110,Math.min(790,b.x)),rty=b.y<225?406:44;mv(ref,rtx,rty,170);}
 
   drawRink();pts.forEach(pt=>{x.fillStyle=pt.c;x.globalAlpha=pt.l;x.fillRect(pt.x,pt.y,6,6);});x.globalAlpha=1;x.fillStyle='#ffd000';x.font='900 42px sans-serif';x.textAlign='center';x.fillText(gTxt,450,235);x.restore();return requestAnimationFrame(loop);}
-  if(isHost&&(tLeft-=dt)<=0){over=1;document.getElementById('res').textContent=sP>sB?'ПОБЕДА ЖЁЛТЫХ!':(sP<sB?'ПОБЕДА КРАСНЫХ!':'НИЧЬЯ!');document.getElementById('fsc').innerHTML=`${sP} : ${sB}<div style="font-size:14px;color:#ffd000;margin-top:6px">🏆 MVP МАТЧА: #${myNum}</div>`;document.getElementById('end').style.display='flex';sfx(330,.5,'sawtooth',.2);return requestAnimationFrame(loop);}
+  if(isHost&&(tLeft-=dt)<=0){
+    if(sP===sB&&!soMode){soMode=1;soTurn=0;soTimer=8;tLeft=25;goalT=1.2;gTxt="🔥 БУЛЛИТЫ!";sfx(2800,.2,"sine",.2);return requestAnimationFrame(loop);}
+    over=1;soMode=0;
+    const totP=Math.max(1,possP+possB),pPct=Math.round(possP/totP*100);
+    document.getElementById('res').textContent=sP>sB?'ПОБЕДА ЖЁЛТЫХ!':(sP<sB?'ПОБЕДА КРАСНЫХ!':'НИЧЬЯ!');
+    document.getElementById('fsc').innerHTML=`${sP} : ${sB}<div style="font-size:12px;color:#dfe4ea;margin-top:8px;line-height:1.5">Удары: ${shotsP} — ${shotsB}<br>Владение: ${pPct}% — ${100-pPct}%<br><span style="color:#ffd000">🏆 MVP МАТЧА: #${myNum}</span></div>`;
+    document.getElementById('end').style.display='flex';sfx(330,.5,'sawtooth',.2);return requestAnimationFrame(loop);
+  }
+  
+  if(own){if(own.t===0)possP+=dt;else possB+=dt;}
+  if(soMode){
+    soTimer-=dt;
+    if(soTimer<=0){soTurn++;soTimer=8;rst();const p=myP();p.x=450;p.y=225;own=p;gTxt="БУЛЛИТ #"+(soTurn+1);}
+  }
+
   const mm=tLeft/60|0,ss=tLeft%60|0;document.getElementById('tm').textContent=`0${mm}:${ss<10?'0':''}${ss}`;
   if(cd>0)cd-=dt;if(dT>0)dT-=dt;if(pkT>0)pkT-=dt;if(askT>0)askT-=dt;if(swCd>0)swCd-=dt;stm=Math.min(1,stm+dt*.3);
   if(isHost&&chaosOn){if(evT>0){evT-=dt;if(evT<=0)evName='';}else if((evCd-=dt)<=0){const evs=['⚡ ТУРБО-ПАРКЕТ','🎈 ПРЫГУЧИЙ МЯЧ','🔮 ГИГАНТСКИЙ МЯЧ'];evName=evs.at(Math.random()*3|0);evT=12;evCd=22;sfx(520,.2,'sawtooth',.15);}}
@@ -259,5 +273,12 @@ function loop(now){
   x.fillStyle='#2ed573';x.fillRect(p.x-18,p.y+20,36*stm,4);if(isC&&chg>=.24){x.fillStyle=chg<.88?'#ffd000':'#ff3b30';x.fillRect(p.x-20,p.y-28,40*chg,6);}
   if(b.pwr){x.fillStyle='rgba(255,107,0,.45)';x.beginPath();x.arc(b.x,b.y,b.r+6,0,7);x.fill();}
   x.fillStyle=b.pwr?'#ffdd59':'#fff';x.beginPath();x.arc(b.x,b.y,b.r,0,7);x.fill();
+  
+  // Болельщики вдоль нижнего борта
+  for(let i=0;i<16;i++){
+    const fx=65+i*51,fy=442-(goalT>0?Math.abs(Math.sin(now/90+i))*6:0);
+    x.fillStyle=i<8?"#ffd000":"#ff5252";x.beginPath();x.arc(fx,fy,5.5,0,7);x.fill();
+  }
+
   x.restore();requestAnimationFrame(loop);
 }requestAnimationFrame(loop);</script></body></html>
