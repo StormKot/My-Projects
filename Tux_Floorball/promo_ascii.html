@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Tux Floorball — Terminal Promo</title><style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Courier New',monospace}
+body{background:#0b0e14;color:#e6edf3;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:10px}
+.term{width:100%;max-width:430px;height:92vh;max-height:780px;background:#111620;border:2px solid #2ed573;border-radius:18px;box-shadow:0 0 35px rgba(46,213,115,.22);display:flex;flex-direction:column;overflow:hidden;position:relative}
+.bar{background:#18202c;padding:10px 14px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #263244}
+.dot{width:11px;height:11px;border-radius:50%}.r{background:#ff5f56}.y{background:#ffbd2e}.g{background:#27c93f}
+.ttl{margin-left:auto;font-size:11px;color:#8b949e;font-weight:700}
+.scr{flex:1;padding:14px;display:flex;flex-direction:column;justify-content:space-between;position:relative}
+.prompt{color:#ff9f43;font-size:12px;font-weight:700;line-height:1.4}.prompt span{color:#2ed573}
+#tuxBox{text-align:center;font-size:15px;line-height:1.15;font-weight:900;color:#ffd000;white-space:pre;margin:4px 0;transition:transform .08s}
+#banner{background:rgba(46,213,115,.12);border:1px solid #2ed573;border-radius:10px;padding:10px;text-align:center}
+#bigTxt{font-size:20px;font-weight:900;color:#fff}#subTxt{font-size:12px;color:#00d2d3;margin-top:4px;font-weight:700}
+#log{font-size:11px;color:#7bed9f;line-height:1.45;height:115px;overflow:hidden;border-top:1px dashed #263244;padding-top:8px}
+.eq{display:flex;align-items:flex-end;justify-content:center;gap:4px;height:26px}.b{width:6px;background:#ff4757;border-radius:3px;transition:height .07s}
+#tap{position:absolute;inset:0;background:rgba(11,14,20,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:10;cursor:pointer;text-align:center;padding:20px}
+#tap button{background:#2ed573;color:#111;border:0;padding:12px 24px;border-radius:20px;font-size:15px;font-weight:900}
+</style></head><body>
+<div class="term"><div id="tap"><div style="font-size:34px">🐧🏒🔥</div><div style="font-size:16px;font-weight:900;color:#ffd000">TUX FLOORBALL — ASCII PROMO</div><button>▶ ЗАПУСТИТЬ КЛИП + БИТ</button></div>
+<div class="bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><div class="ttl">claude-code ~ StormKot/Tux_Floorball</div></div>
+<div class="scr"><div class="prompt"><span>❯</span> claude "сделай флорбол с пингвинами"<br><span style="color:#a55eea">✽ Compiling Tux_Floorball v1.0... [OK]</span></div>
+<div id="tuxBox"></div><div id="banner"><div id="bigTxt">TUX FLOORBALL</div><div id="subTxt">://github.com</div></div>
+<div class="eq" id="eq"></div><div id="log"></div></div></div>
+<script>
+const frames=["    _~_    \n   (o o)   \n  /  V  \\  \n /(  _  )\\ \n   ^^ ^^  🏒","   \\ _~_ / \n    (o o)  \n    / V \\  \n   (  _  ) \n  ^^   ^^ 🏒","    _~_    \n   (^ ^)   \n  <  V  >  \n   (  _  ) \n   ^^ ^^ 🏒⚡","   ^^ ^^   \n  (  _  )  \n  \\  V  /  \n   (o o)   \n    ~_~  🔄🏒"];
+const slides=[["🐧 TUX FLOORBALL 🏒","ФЛОРБОЛ С ПИНГВИНАМИ В БРАУЗЕРЕ"],["🌪️ ФИНТ «УЛИТКА»","КРУТИ РАЗВОРОТ НА 360° НА ПЯТАКЕ"],["🔥 БУЛЛИТЫ IFF","РАСКАЧАЙ ВРАТАРЯ И ПОЛОЖИ В ДЕВЯТКУ"],["⚡ ЗОЛОТОЙ ГОЛ","ОВЕРТАЙМ, 5v5, 3v3, 1v1 + УМНЫЙ ИИ"],["🚀 ИГРАЙ СЕЙЧАС","://github.com/My-Projects"]];
+const codeLines=["✔ Инициализация ледового паркета 900x450...","✔ Загрузка пингвинов Tux + полосатый рефери R...","✔ Подключение физики мяча и подкрутки...","✔ Настройка тактического ИИ (IQ 80)...","✔ Активация режима: УЛИТКА + БУЛЛИТЫ IFF...","✔ Сборка tux_floorball_yandex.zip готова!"];
+const eq=document.getElementById("eq"),tux=document.getElementById("tuxBox"),big=document.getElementById("bigTxt"),sub=document.getElementById("subTxt"),log=document.getElementById("log");
+for(let i=0;i<18;i++){const d=document.createElement("div");d.className="b";d.style.height="6px";eq.appendChild(d);}
+const bars=[...document.querySelectorAll(".b")];let step=0,ac=null;
+const notes=[261.6,329.6,392.0,523.3,392.0,329.6,293.7,392.0,493.9,587.3,493.9,392.0,349.2,440.0,523.3,659.3];
+function beat(){if(!ac)return;const t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain(),o2=ac.createOscillator(),g2=ac.createGain();o.type="square";o.frequency.setValueAtTime(notes[step%notes.length],t);g.gain.setValueAtTime(0.08,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.16);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+0.17);if(step%2===0){o2.type="triangle";o2.frequency.setValueAtTime(step%4===0?110:55,t);g2.gain.setValueAtTime(0.18,t);g2.gain.exponentialRampToValueAtTime(0.001,t+0.14);o2.connect(g2);g2.connect(ac.destination);o2.start(t);o2.stop(t+0.15);}tux.textContent=frames[step%frames.length];tux.style.transform=`scale(${step%2?1.08:0.96}) rotate(${step%4===3?8:(step%4===1?-8:0)}deg)`;tux.style.color=["#ffd000","#2ed573","#00d2d3","#ff6b81"][step%4];bars.forEach((b,i)=>{b.style.height=(4+Math.abs(Math.sin(step*0.8+i))*22)+"px";b.style.background=i%2?"#2ed573":"#ff4757";});if(step%8===0){const sl=slides[(step/8|0)%slides.length];big.textContent=sl[0];sub.textContent=sl[1];}if(step%3===0){const ln=document.createElement("div");ln.textContent=codeLines[(step/3|0)%codeLines.length];log.appendChild(ln);if(log.children.length>5)log.removeChild(log.firstChild);}step++;}
+document.getElementById("tap").onclick=()=>{document.getElementById("tap").style.display="none";ac=new(window.AudioContext||window.webkitAudioContext)();beat();setInterval(beat,190);};
+</script></body></html>
