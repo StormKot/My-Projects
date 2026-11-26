@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tux Clicker — Иконка и Обложки</title><style>
+*{box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+body{margin:0;background:#111622;color:#fff;padding:16px;display:flex;flex-direction:column;align-items:center;gap:20px}
+.card{background:#192233;border:2px solid #2c3b57;border-radius:16px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:10px;max-width:96vw}
+canvas{max-width:100%;height:auto;border-radius:14px;box-shadow:0 10px 28px rgba(0,0,0,.55)}
+button{background:#2ed573;color:#111;border:0;border-bottom:4px solid #1e9e52;padding:11px 22px;border-radius:12px;font-weight:900;font-size:13px;cursor:pointer}
+button:active{transform:translateY(2px)}
+</style></head><body>
+<div class="card"><b style="color:#ffd000">ХАЙП-ИКОНКА 512×512 PNG</b><canvas id="ic" width="512" height="512"></canvas><button onclick="dl('ic','tux_clicker_icon_512.png')">СКАЧАТЬ ICON 512×512</button></div>
+<div class="card"><b style="color:#48dbfb">ОБЛОЖКА RU 800×470 PNG</b><canvas id="cvRu" width="800" height="470"></canvas><button onclick="dl('cvRu','tux_clicker_cover_ru_800x470.png')">СКАЧАТЬ COVER RU 800×470</button></div>
+<div class="card"><b style="color:#ff9f1a">ОБЛОЖКА EN 800×470 PNG</b><canvas id="cvEn" width="800" height="470"></canvas><button onclick="dl('cvEn','tux_clicker_cover_en_800x470.png')">СКАЧАТЬ COVER EN 800×470</button></div>
+<script>
+function dl(id,n){const a=document.createElement('a');a.download=n;a.href=document.getElementById(id).toDataURL('image/png');a.click();}
+
+function drawCursor(x,cx,cy,sc,rot){
+  x.save();x.translate(cx,cy);x.rotate(rot);x.scale(sc,sc);
+  // Ударные лучи вокруг острия курсора
+  x.strokeStyle='#ffd000';x.lineWidth=6;x.lineCap='round';
+  [[-18,-18,-34,-34],[0,-24,0,-44],[-24,0,-44,0],[18,-16,32,-30]].forEach(([x1,y1,x2,y2])=>{
+    x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
+  });
+  // Тень курсора
+  x.fillStyle='rgba(0,0,0,.35)';
+  x.beginPath();x.moveTo(6,8);x.lineTo(6,96);x.lineTo(28,74);x.lineTo(44,108);x.lineTo(60,100);x.lineTo(44,66);x.lineTo(74,66);x.closePath();x.fill();
+  // Белый хайповый курсор с жирной чёрной обводкой
+  x.fillStyle='#ffffff';x.strokeStyle='#111111';x.lineWidth=7;x.lineJoin='round';
+  x.beginPath();x.moveTo(0,0);x.lineTo(0,88);x.lineTo(22,66);x.lineTo(38,100);x.lineTo(54,92);x.lineTo(38,58);x.lineTo(68,58);x.closePath();
+  x.fill();x.stroke();
+  x.restore();
+}
+
+function drawFish(x,fx,fy,sc,rot){
+  x.save();x.translate(fx,fy);x.rotate(rot);x.scale(sc,sc);
+  x.fillStyle='#ffd000';x.strokeStyle='#111';x.lineWidth=3;
+  x.beginPath();x.ellipse(0,0,22,12,0,0,7);x.fill();x.stroke();
+  x.beginPath();x.moveTo(-18,0);x.lineTo(-34,-11);x.lineTo(-34,11);x.closePath();x.fill();x.stroke();
+  x.fillStyle='#111';x.beginPath();x.arc(10,-2,2.8,0,7);x.fill();
+  x.restore();
+}
+
+function drawTux(x,px,py,sc,hockey,fisher){
+  x.save();x.translate(px,py);x.scale(sc,sc);
+  x.fillStyle='rgba(0,0,0,.25)';x.beginPath();x.ellipse(0,82,58,14,0,0,7);x.fill();
+  x.fillStyle='#ff9f1a';x.strokeStyle='#111';x.lineWidth=3;
+  x.beginPath();x.ellipse(-28,74,21,10,-.18,0,7);x.fill();x.stroke();
+  x.beginPath();x.ellipse(28,74,21,10,.18,0,7);x.fill();x.stroke();
+  const bg=x.createLinearGradient(-55,-65,55,80);bg.addColorStop(0,hockey?'#e84118':'#2f3542');bg.addColorStop(1,'#0b0f17');
+  x.fillStyle=bg;x.beginPath();x.ellipse(0,8,64,74,0,0,7);x.fill();x.stroke();
+  x.fillStyle='#fff';x.beginPath();x.ellipse(0,18,42,54,0,0,7);x.fill();
+  if(hockey){
+    x.fillStyle='#e84118';x.beginPath();x.roundRect(-51,-12,102,44,14);x.fill();x.stroke();
+    x.fillStyle='#fff';x.fillRect(-49,18,98,6);
+    x.fillStyle='#111';x.font='900 18px sans-serif';x.textAlign='center';x.fillText('10',0,11);
+  }
+  x.fillStyle=hockey?'#e84118':'#2f3542';
+  x.beginPath();x.ellipse(-66,8,15,35,.35,0,7);x.fill();x.stroke();
+  x.beginPath();x.ellipse(66,8,15,35,-.35,0,7);x.fill();x.stroke();
+  x.fillStyle='rgba(255,107,129,.55)';x.beginPath();x.ellipse(-30,-20,9,5,0,0,7);x.ellipse(30,-20,9,5,0,0,7);x.fill();
+  x.fillStyle='#fff';x.beginPath();x.arc(-18,-38,11.5,0,7);x.arc(18,-38,11.5,0,7);x.fill();
+  x.fillStyle='#111';x.beginPath();x.arc(-16,-38,5.8,0,7);x.arc(20,-38,5.8,0,7);x.fill();
+  x.fillStyle='#fff';x.beginPath();x.arc(-18,-40,2.3,0,7);x.arc(18,-40,2.3,0,7);x.fill();
+  x.fillStyle='#ff9f1a';x.beginPath();x.moveTo(-16,-23);x.lineTo(16,-23);x.lineTo(0,-4);x.closePath();x.fill();x.stroke();
+  if(fisher){
+    x.strokeStyle='#8c6239';x.lineWidth=4;x.beginPath();x.moveTo(-45,20);x.lineTo(-95,-30);x.stroke();
+    x.strokeStyle='#fff';x.lineWidth=1.5;x.beginPath();x.moveTo(-95,-30);x.lineTo(-95,70);x.stroke();
+  }
+  if(hockey){
+    x.fillStyle='#1e272e';x.beginPath();x.arc(0,-46,39,Math.PI,0);x.fill();x.stroke();
+    x.fillStyle='rgba(0,229,255,.42)';x.beginPath();x.roundRect(-36,-48,72,15,6);x.fill();
+    x.strokeStyle='#d2dae2';x.lineWidth=7;x.lineCap='round';x.beginPath();x.moveTo(-54,44);x.lineTo(76,-14);x.stroke();
+    x.fillStyle='#111';x.beginPath();x.roundRect(66,-24,34,13,4);x.fill();
+    x.fillStyle='#fff';x.fillRect(74,-24,5,13);x.fillRect(85,-24,5,13);
+  }
+  x.restore();
+}
+
+// 1. ХАЙП-ИКОНКА 512x512 (Без лишнего текста — как у топовых кликеров!)
+const ix=document.getElementById('ic').getContext('2d');
+const ig=ix.createRadialGradient(256,240,20,256,256,360);
+ig.addColorStop(0,'#00d2d3');ig.addColorStop(0.55,'#0984e3');ig.addColorStop(1,'#192a56');
+ix.fillStyle=ig;ix.fillRect(0,0,512,512);
+// Солнечные лучи из центра (классика хайп-иконок)
+ix.save();ix.translate(256,265);ix.fillStyle='rgba(255,255,255,.11)';
+for(let i=0;i<12;i++){ix.rotate(Math.PI/6);ix.beginPath();ix.moveTo(0,0);ix.lineTo(-32,-420);ix.lineTo(32,-420);ix.closePath();ix.fill();}
+ix.restore();
+// Кольца клика вокруг пингвина
+[145,195].forEach((r,idx)=>{ix.strokeStyle=`rgba(255,255,255,${0.45-idx*0.2})`;ix.lineWidth=8;ix.beginPath();ix.arc(256,275,r,0,7);ix.stroke();});
+// Крупный пингвин по центру
+drawTux(ix,245,270,2.15,0,0);
+// Вылетающие рыбки и +100
+drawFish(ix,105,115,1.35,-0.4);
+drawFish(ix,405,105,1.25,0.35);
+ix.fillStyle='#ffd000';ix.strokeStyle='#111';ix.lineWidth=7;ix.font='900 44px sans-serif';ix.textAlign='center';
+ix.strokeText('+100',115,205);ix.fillText('+100',115,205);
+// Жирный белый курсор, кликающий прямо в пингвина
+drawCursor(ix,295,295,1.45,-0.18);
+
+// 2. ОБЛОЖКИ 800x470 (Живой арт без ИИ-слопа)
+function makeCover(id,sub){
+  const cx=document.getElementById(id).getContext('2d');
+  const sky=cx.createLinearGradient(0,0,0,250);sky.addColorStop(0,'#061326');sky.addColorStop(1,'#1e6bb8');
+  cx.fillStyle=sky;cx.fillRect(0,0,800,250);
+  // Горы
+  cx.fillStyle='#dff9fb';cx.beginPath();cx.moveTo(0,245);cx.lineTo(150,105);cx.lineTo(310,245);cx.lineTo(520,85);cx.lineTo(700,245);cx.lineTo(800,145);cx.lineTo(800,250);cx.lineTo(0,250);cx.fill();
+  // Океан
+  const sea=cx.createLinearGradient(0,245,0,470);sea.addColorStop(0,'#1e90ff');sea.addColorStop(1,'#0c2461');
+  cx.fillStyle=sea;cx.fillRect(0,245,800,225);
+  // Льдина помощника справа
+  cx.fillStyle='#74b9ff';cx.beginPath();cx.ellipse(635,380,78,20,0,0,7);cx.fill();
+  cx.fillStyle='#fff';cx.beginPath();cx.ellipse(635,374,72,15,0,0,7);cx.fill();
+  drawTux(cx,635,315,0.72,0,1);
+  // Главный айсберг слева-по центру
+  cx.fillStyle='#74b9ff';cx.beginPath();cx.ellipse(315,398,195,44,0,0,7);cx.fill();
+  cx.fillStyle='#fff';cx.beginPath();cx.ellipse(315,386,185,33,0,0,7);cx.fill();
+  // Кольца клика + Хоккеист Tux + Курсор
+  cx.strokeStyle='rgba(255,255,255,.35)';cx.lineWidth=6;cx.beginPath();cx.arc(310,275,140,0,7);cx.stroke();
+  drawTux(cx,305,268,1.55,1,0);
+  drawCursor(cx,355,285,1.15,-0.2);
+  // Вылетающие рыбки и +500
+  drawFish(cx,125,215,1.25,-0.35);drawFish(cx,495,190,1.2,0.3);
+  cx.fillStyle='#ffd000';cx.strokeStyle='#111';cx.lineWidth=6;cx.font='900 34px sans-serif';cx.textAlign='center';
+  cx.strokeText('+500',135,285);cx.fillText('+500',135,285);
+  // Чистый аркадный заголовок с обводкой (без громоздких коробок)
+  cx.font='900 58px sans-serif';cx.lineWidth=10;cx.strokeStyle='#091322';
+  cx.strokeText('TUX CLICKER',400,68);cx.fillStyle='#ffd000';cx.fillText('TUX CLICKER',400,68);
+  cx.font='900 22px sans-serif';cx.lineWidth=6;
+  cx.strokeText(sub,400,102);cx.fillStyle='#7bed9f';cx.fillText(sub,400,102);
+}
+makeCover('cvRu','ЭВОЛЮЦИЯ ПИНГВИНА • ТОП ИГРОКОВ');
+makeCover('cvEn','PENGUIN EVOLUTION • LEADERBOARD');
+</script></body></html>
